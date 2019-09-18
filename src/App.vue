@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>Password Strength Meter</h1>
+    <h1>Password Strength Meter (MsP)</h1>
     <password v-model="password" :toggle="true"></password>
   </div>
 </template>

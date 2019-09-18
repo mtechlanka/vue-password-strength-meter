@@ -359,25 +359,38 @@
     border-radius: 3px;
 }
 
-  .Password__strength-meter:before, .Password__strength-meter:after {
+  .Password__strength-meter:before {
     content: '';
-    height: inherit;
+    background: #00FF00;
+    display: block;
+    border-color: #FFF;
+    border-style: solid;
+    border-width: 0 3px 0 5px;
+    position: absolute;
+    width: 23%;
+       height: inherit;
+    z-index: 10;
+    height: 22;
+  }
+ .Password__strength-meter:after {
+    content: ' ';
     background: transparent;
     display: block;
     border-color: #FFF;
     border-style: solid;
-    border-width: 0 5px 0 5px;
+    border-width: 0 5px 0 3px;
     position: absolute;
-    width: 20%;
+    width: 23%;
+    height: inherit;
     z-index: 10;
   }
 
   .Password__strength-meter:before {
-    left: 20%;
+    left: 25%;
   }
 
   .Password__strength-meter:after {
-    right: 20%;
+    right: 25%;
   }
 
   .Password__strength-meter--fill {
@@ -391,22 +404,22 @@
 
   .Password__strength-meter--fill[data-score='0'] {
     background: darkred;
-    width: 20%;
+    width: 0%;
   }
 
   .Password__strength-meter--fill[data-score='1'] {
     background: orangered;
-    width: 40%;
+    width: 25%;
   }
 
   .Password__strength-meter--fill[data-score='2'] {
     background: orange;
-    width: 60%;
+    width: 50%;
   }
 
   .Password__strength-meter--fill[data-score='3'] {
     background: yellowgreen;
-    width: 80%;
+    width: 75%;
   }
 
   .Password__strength-meter--fill[data-score='4'] {

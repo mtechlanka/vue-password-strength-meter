@@ -1,7 +1,13 @@
 <template>
   <div id="app">
-    <h1>Password Strength Meter (MsP)</h1>
-    <password v-model="password" :toggle="true"></password>
+    <h1>Password Strength Meter</h1>
+
+    <password v-model="password" :toggle="true" />
+
+    <password v-model="password" disabled="disabled" placeholder="This input is disabled." />
+
+    <password v-model="password" id="custom-id" name="custom_name" />
+
   </div>
 </template>
 
@@ -11,13 +17,13 @@ import Password from './components/PasswordStrengthMeter.vue'
 export default {
   name: 'app',
   components: {
-    Password
+    Password,
   },
   data () {
     return {
-      password: null
+      password: null,
     }
-  }
+  },
 }
 </script>
 

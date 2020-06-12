@@ -5,16 +5,11 @@
       class="Password__group"
     >
       <input
+        v-bind="$attrs"
         :type="inputType"
-        :ref="referanceValue"
-        :class="[defaultClass, disabled ? disabledClass : '']"
-        :name="name"
-        :id="id"
-        :placeholder="placeholder"
-        :required="required"
-        :disabled="disabled"
-        :autocomplete="autocomplete"
-        v-bind:value="value"
+        :ref="referenceValue"
+        :class="[defaultClass, $attrs.disabled ? disabledClass : '']"
+        :value="value"
         @input="evt => emitValue('input', evt.target.value)"
         @blur="evt => emitValue('blur', evt.target.value)"
         @focus="evt => emitValue('focus', evt.target.value)"
@@ -22,7 +17,7 @@
       <div class="Password__icons">
         <div
           v-if="badge"
-          v-bind:class="[isSecure ? successClass : '', !isSecure && isActive ? errorClass : '' ]"
+          :class="[isSecure ? successClass : '', !isSecure && isActive ? errorClass : '' ]"
           class="Password__badge"
           v-cloak
           >
@@ -35,6 +30,7 @@
               type="button"
               class="btn-clean"
               :aria-label="showPasswordLabel"
+              tabindex="-1"
               @click.prevent="togglePassword()">
               <svg v-if="this.$data._showPassword" version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <title>{{showPasswordLabel}}</title>
@@ -49,71 +45,24 @@
       </div>
     </div>
 
-    <div v-if="showStrengthMeter" v-bind:class="[strengthMeterClass]">
-      <div v-bind:class="[strengthMeterFillClass]" :data-score="passwordStrength"></div>
+    <div v-if="showStrengthMeter" :class="[strengthMeterClass]">
+      <div :class="[strengthMeterFillClass]" :data-score="passwordStrength"></div>
     </div>
   </div>
 </template>
 
 <script>
-  import zxcvbn from 'zxcvbn'
 
   export default {
+    name: 'VuePasswordStrengthMeter',
+    inheritAttrs: false,
     props: {
-      /**
-       * Input field id
-       * @type {String}
-       */
-      id: {
-        type: String,
-        default: 'password'
-      },
-      /**
-       * Input field placeholder text
-       * @type {String}
-       */
-      placeholder: {
-        type: String,
-        default: 'Please enter your password'
-      },
-      /**
-       * Input field autocomplete
-       * @type {String}
-       */
-      autocomplete: {
-        type: String,
-        default: 'new-password'
-      },
       /**
        * Binded value
        * @type {Object}
        */
       value: {
         type: String
-      },
-      /**
-       * Input field name
-       * @type {String}
-       */
-      name: {
-        type: String,
-        default: 'password'
-      },
-      /**
-       * Input field required attribute
-       * @type {Boolean}
-       */
-      required: {
-        type: Boolean,
-        default: true
-      },
-      /**
-       * Input field disabled attribute
-       * @type {Boolean}
-       */
-      disabled: {
-        type: Boolean,
-        default: false
       },
       /**
        * Password min length.
@@ -157,7 +106,7 @@
       * Prop to change the
       * ref of the input
       */
-      referanceValue: {
+      referenceValue: {
         type: String,
         default: 'input'
       },
@@ -250,6 +199,13 @@
       labelHide: {
         type: String,
         default: 'Hide Password'
+      },
+      /**
+       * @type String
+       */
+      userInputs: {
+        type: Array,
+        default: () => []
       }
     },
     data () {
@@ -281,7 +237,9 @@
        * @return {Number} Password Strength Score
        */
       passwordStrength () {
-        return this.password ? zxcvbn(this.password).score : null
+        /* global zxcvbn */
+        /* eslint no-undef: "error" */
+        return this.password ? zxcvbn(this.password, (this.userInputs.length >= 1 ? this.userInputs : null)).score : null
       },
 
       /**
@@ -331,6 +289,8 @@
       },
       passwordStrength (score) {
         this.$emit('score', score)
+        /* global zxcvbn */
+        /* eslint no-undef: "error" */
         this.$emit('feedback', zxcvbn(this.password).feedback)
       }
     }
@@ -359,38 +319,25 @@
     border-radius: 3px;
 }
 
-  .Password__strength-meter:before {
+  .Password__strength-meter:before, .Password__strength-meter:after {
     content: '';
-    background: #00FF00;
-    display: block;
-    border-color: #FFF;
-    border-style: solid;
-    border-width: 0 3px 0 5px;
-    position: absolute;
-    width: 23%;
-       height: inherit;
-    z-index: 10;
-    height: 22;
-  }
- .Password__strength-meter:after {
-    content: ' ';
+    height: inherit;
     background: transparent;
     display: block;
     border-color: #FFF;
     border-style: solid;
-    border-width: 0 5px 0 3px;
+    border-width: 0 5px 0 5px;
     position: absolute;
-    width: 23%;
-    height: inherit;
+    width: 20%;
     z-index: 10;
   }
 
   .Password__strength-meter:before {
-    left: 25%;
+    left: 20%;
   }
 
   .Password__strength-meter:after {
-    right: 25%;
+    right: 20%;
   }
 
   .Password__strength-meter--fill {
@@ -404,22 +351,22 @@
 
   .Password__strength-meter--fill[data-score='0'] {
     background: darkred;
-    width: 0%;
+    width: 20%;
   }
 
   .Password__strength-meter--fill[data-score='1'] {
     background: orangered;
-    width: 25%;
+    width: 40%;
   }
 
   .Password__strength-meter--fill[data-score='2'] {
     background: orange;
-    width: 50%;
+    width: 60%;
   }
 
   .Password__strength-meter--fill[data-score='3'] {
     background: yellowgreen;
-    width: 75%;
+    width: 80%;
   }
 
   .Password__strength-meter--fill[data-score='4'] {

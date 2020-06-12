@@ -1,6 +1,6 @@
 {
   "name": "vue-password-strength-meter",
-  "version": "1.5.0",
+  "version": "1.7.2",
   "description": "Interactive password strength meter based on zxcvbn",
   "author": "Jakub Juszczak <jakub@posteo.de>",
   "private": false,
@@ -28,7 +28,7 @@
     "build": "npm run release",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
-    "prepare": "npm run release",
+    "prepublish": "npm run build",
     "release": "cross-env NODE_ENV=production webpack --progress --hide-modules --config  ./build/webpack.release.js && cross-env NODE_ENV=production webpack --progress --hide-modules --config  ./build/webpack.release.min.js"
   },
   "files": [
@@ -99,8 +99,7 @@
     "webpack": "^1.13.2",
     "webpack-dev-middleware": "^1.10.1",
     "webpack-hot-middleware": "^2.17.1",
-    "webpack-merge": "^2.4.0",
-    "zxcvbn": "^4.4.2"
+    "webpack-merge": "^2.4.0"
   },
   "engines": {
     "node": ">= 4.0.0",
